@@ -28,6 +28,6 @@ abstract class BaseEntity {
 	//마지막 수정 날짜 이용
 	@LastModifiedDate
 	//테이블이 만들어 질 때는 modDate란 칼럼으로 생성
-	@Column(name="date")
+	@Column(name="moddate")
 	private LocalDateTime modDate;
 }
