@@ -6,14 +6,20 @@ import java.util.stream.IntStream;
 
 import org.springframework.data.domain.Pageable;
 
-import com.kt5.mobileservice1.model.Item;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class PageResponseItemDTO {
+	private String error;
+	
 	//DTO리스트
-	private List<Item> itemList;
+	private List<ItemDTO> itemList;
 	
 	//전체 페이지 개수
 	private int totalPage;

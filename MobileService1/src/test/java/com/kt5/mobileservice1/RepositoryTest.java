@@ -28,7 +28,7 @@ public class RepositoryTest {
 	//@Test
 	public void testRegisterMember() {
 		
-		IntStream.rangeClosed(1, 100).forEach(i -> {
+		IntStream.rangeClosed(101, 1).forEach(i -> {
 			
 			String password = BCrypt.hashpw("i", BCrypt.gensalt());
 			Member member = Member.builder().email("kt"+i+"@kt.com").password(password).name("태오"+i)
