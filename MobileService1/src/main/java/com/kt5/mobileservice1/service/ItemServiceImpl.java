@@ -1,7 +1,10 @@
 package com.kt5.mobileservice1.service;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -73,10 +76,7 @@ public class ItemServiceImpl implements ItemService {
 		MultipartFile uploadFile = dto.getImage();
 		//전송된 파일이 있다면
 		if(uploadFile.isEmpty() == false){
-			//이미지 파일 만 업로드하기 위해서 이미지 파일이 아니면 작업 중단
-			if(uploadFile.getContentType().startsWith("image") == false){
-				return null;
-			}
+			
 			//원본 파일의 파일 이름 찾아오기
 			String originalFile = uploadFile.getOriginalFilename();
 			String fileName = originalFile.substring(originalFile.lastIndexOf("\\") + 1);
@@ -120,10 +120,56 @@ public class ItemServiceImpl implements ItemService {
 
 	@Override
 	public Long updateItem(ItemDTO dto) {
+		//삽입할때는 이미지가 없으면 이미지 업로드를 처리하지 않거나 기본 이미지를 설정하지만
+		//수정을 할 때는 이미지가 없다는 것은 수정할 이미지가 없다는 의미가 될 수 있습니다.
+		if(dto.getImage().isEmpty() == false) {
+			//업로드된 파일을 가져오기
+			MultipartFile uploadFile = dto.getImage();
+			
+			//원본 파일의 파일 이름 찾아오기
+			String originalName = uploadFile.getOriginalFilename();
+			//IE나 Edge에서는 전체 파일 경로가 오기 때문에 마지막 \위치를 찾아 뒤의 부분만 가져옴 
+			String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
+			
+			//파일을 업로드할 디렉토리 경로를 생성
+			//회원정보 이미지와 아이템 이미지를 구별해서 저장하고자 하면 makeFolder()메서드를 각각구현
+			String realUploadPath = makeFolder();
+			
+			//파일 이음 중복을 최소화하기 위한 UUID생성
+			//업로드 할 파일의 경로를 생성
+			String uuid = UUID.randomUUID().toString();
+			//파일 이름 중간에 _를 이용해서 구분
+			//교재 나 검색 한 소스를 볼때 \나 /가 보이면 앞뒤 문맥을 읽어봐야 함
+			//그래서 이 기호가 디렉토리 기호라면 File.separator로 변경하는 부분을 고려
+			//교재를 볼 때는 어떤 운영체제에서 작성한 것인지 확인하고 교재를 읽어보시는 것이 좋음
+			String saveName = uploadPath + File.separator + realUploadPath + File.separator +
+					uuid + fileName;
+			System.out.println("1:" + saveName);
+			
+			//실제 전송할 경로를 생성 - jdk1.7 이상에서 지원
+			Path savePath = Paths.get(saveName);
+			try {
+				//파일 업로드
+				uploadFile.transferTo(savePath);
+			}catch (Exception e) {
+				System.out.println(e.getLocalizedMessage());
+				e.printStackTrace();
+			}
+			//파일으리 경로를 저장
+			dto.setPictureurl(realUploadPath + File.separator + uuid + fileName);
+			
+		}else {
+			//업로드할 파일이 없을 때 이전 내용을 그대로 적용
+			dto.setPictureurl(getItem(dto).getPictureurl());
+		}
+		
+		//데이터베이스에서 수정
 		Item item = dtoToEntity(dto);
-		Long itemid = item.getItemid();
 		itemRepository.save(item);
-		return itemid;
+		//수정한 날짜 업데이트
+		updateDate();
+		
+		return item.getItemid();
 	}
 
 	@Override
@@ -150,6 +196,18 @@ public class ItemServiceImpl implements ItemService {
 		});
 		result.setItemList(list);
 		return result;
+	}
+
+	@Override
+	public String updatedate() {
+		try(BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(
+				"./updatedate.dat")))) {
+			String str = br.readLine();
+			return str;
+		}catch(Exception e) {
+			System.out.println(e.getLocalizedMessage());
+			return null;
+		}
 	}
 
 

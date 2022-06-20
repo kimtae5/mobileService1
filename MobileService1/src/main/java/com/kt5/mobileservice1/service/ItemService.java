@@ -17,6 +17,8 @@ public interface ItemService {
 	public Long deleteItem(ItemDTO dto);
 	//페이지 단위로 데이터를 가져오기
 	public PageResponseItemDTO getList(PageRequestItemDTO dto);
+	//마지막 업데이트 된 시간을 전송하는 메서드
+	public String updatedate();
 	
 	
 

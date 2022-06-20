@@ -1,5 +1,8 @@
 package com.kt5.mobileservice1.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,7 +58,6 @@ public class ItemController {
 			response = ItemDTO.builder().error(e.getMessage()).build();
 		}
 		return ResponseEntity.ok().body(response);
-
 	}
 	
 	//아이템삭제
@@ -69,10 +71,30 @@ public class ItemController {
 			response = ItemDTO.builder().error(e.getMessage()).build();
 		}
 		return ResponseEntity.ok().body(response);
-		
 	}
 	
+	//아이템수정
+	@PostMapping("update")
+	public ResponseEntity<?> updateItem(ItemDTO dto) {
+		ItemDTO response = null;
+		try {
+			Long itemid = itemService.updateItem(dto);
+			response = ItemDTO.builder().itemid(itemid).build();
+		}catch (Exception e) {
+			response = ItemDTO.builder().error(e.getMessage()).build();
+		}
+		return ResponseEntity.ok().body(response);
+	}
 	
+	//마지막 수정시간을 전송
+	@GetMapping("updatedate")
+	public ResponseEntity<?> updatedateItem() {
+		String updatedate = itemService.updatedate();
+		//별도의 DTO가 없어서 Map을 이용해서 저장
+		Map<String,String> map = new HashMap<>();
+		map.put("updatedate", updatedate);
+		return ResponseEntity.ok().body(updatedate);
+	}
 	
 	
 	
