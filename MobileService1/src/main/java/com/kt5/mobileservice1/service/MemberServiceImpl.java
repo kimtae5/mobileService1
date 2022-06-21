@@ -82,7 +82,7 @@ public class MemberServiceImpl implements MemberService{
 			
 			//업로드 할 파일의 경로를 생성
 			String uuid = UUID.randomUUID().toString();
-			String saveName = uploadPath + File.separator + realUploadPath + File.separator + uuid + fileName;
+			String saveName = uploadPath + File.separator + realUploadPath + "/" + uuid + fileName;
 			System.out.println("1:" + saveName);
 			Path savePath = Paths.get(saveName);
 			try {
@@ -92,7 +92,7 @@ public class MemberServiceImpl implements MemberService{
 				System.out.println(e.getLocalizedMessage());
 			}
 			//이미지 경로를 DTO에 설정
-			dto.setImageurl(realUploadPath + File.separator + uuid + fileName);
+			dto.setImageurl(realUploadPath + "/" + uuid + fileName);
 		}
 		member = dtoToEntity(dto);
 		
@@ -167,7 +167,7 @@ public class MemberServiceImpl implements MemberService{
 			
 			//업로드 할 파일의 경로를 생성
 			String uuid = UUID.randomUUID().toString();
-			String saveName = uploadPath + File.separator + realUploadPath + File.separator + uuid + fileName;
+			String saveName = uploadPath + File.separator + realUploadPath + "/" + uuid + fileName;
 			System.out.println("1:" + saveName);
 			Path savePath = Paths.get(saveName);
 			try {
@@ -178,7 +178,7 @@ public class MemberServiceImpl implements MemberService{
 				System.out.println(e.getLocalizedMessage());
 			}
 			//이미지 경로를 DTO에 설정
-			dto.setImageurl(realUploadPath + File.separator + uuid + fileName);
+			dto.setImageurl(realUploadPath + "/" + uuid + fileName);
 		}else {
 			dto.setImageurl(getMember(dto).getImageurl());
 		}

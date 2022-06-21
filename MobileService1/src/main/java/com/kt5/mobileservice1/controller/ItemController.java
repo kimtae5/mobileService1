@@ -93,7 +93,7 @@ public class ItemController {
 		//별도의 DTO가 없어서 Map을 이용해서 저장
 		Map<String,String> map = new HashMap<>();
 		map.put("updatedate", updatedate);
-		return ResponseEntity.ok().body(updatedate);
+		return ResponseEntity.ok().body(map);
 	}
 	
 	
