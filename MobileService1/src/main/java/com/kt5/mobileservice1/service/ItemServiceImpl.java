@@ -86,14 +86,14 @@ public class ItemServiceImpl implements ItemService {
 			
 			//업로드 할 파일의 경로를 생성
 			String uuid = UUID.randomUUID().toString();
-			String saveName = uploadPath + File.separator + realUploadPath + File.separator + uuid + fileName;
+			String saveName = uploadPath + File.separator + realUploadPath + "/" + uuid + fileName;
 			System.out.println("1:" + saveName);
 			Path savePath = Paths.get(saveName);
 			try {
 				//파일 업로드
 				uploadFile.transferTo(savePath);
 				//이미지 경로를 DTO에 설정
-				dto.setPictureurl(realUploadPath + File.separator + uuid + fileName);
+				dto.setPictureurl(realUploadPath + "/" + uuid + fileName);
 			}catch (Exception e) {
 				System.out.println(e.getLocalizedMessage());
 			}
@@ -142,7 +142,7 @@ public class ItemServiceImpl implements ItemService {
 			//교재 나 검색 한 소스를 볼때 \나 /가 보이면 앞뒤 문맥을 읽어봐야 함
 			//그래서 이 기호가 디렉토리 기호라면 File.separator로 변경하는 부분을 고려
 			//교재를 볼 때는 어떤 운영체제에서 작성한 것인지 확인하고 교재를 읽어보시는 것이 좋음
-			String saveName = uploadPath + File.separator + realUploadPath + File.separator +
+			String saveName = uploadPath + File.separator + realUploadPath + "/" +
 					uuid + fileName;
 			System.out.println("1:" + saveName);
 			
@@ -156,7 +156,7 @@ public class ItemServiceImpl implements ItemService {
 				e.printStackTrace();
 			}
 			//파일으리 경로를 저장
-			dto.setPictureurl(realUploadPath + File.separator + uuid + fileName);
+			dto.setPictureurl(realUploadPath + "/" + uuid + fileName);
 			
 		}else {
 			//업로드할 파일이 없을 때 이전 내용을 그대로 적용

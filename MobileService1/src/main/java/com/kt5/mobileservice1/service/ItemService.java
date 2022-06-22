@@ -20,9 +20,6 @@ public interface ItemService {
 	//마지막 업데이트 된 시간을 전송하는 메서드
 	public String updatedate();
 	
-	
-
-	
 	//DTO를 Entity로 변환해주는 메서드
 	public default Item dtoToEntity(ItemDTO dto) {
 		Item item = Item.builder()
