@@ -19,6 +19,7 @@ public class MemberController {
 	
 	@PostMapping("/register")
 	public ResponseEntity<?> registerMember(MemberDTO dto){
+		System.out.println("dto:" + dto.toString());
 		ResponseMemberDTO response = null;
 		try {
 			//데이터 삽입처리
